@@ -140,11 +140,11 @@
 
 		if (useProxy)
 		{
-			for (test in opts)
+			for (optkey in opts)
 			{
-				if ('join' in opts[test])
+				if (opts[optkey] instanceof Array)
 				{
-					opts[test] = opts[test].join(',');
+					opts[optkey] = opts[optkey].join(',');
 				}
 			}
 
