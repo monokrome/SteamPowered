@@ -73,6 +73,9 @@
 	 *        application is able to make use of your newly set up proxy.
 	 ***/
 
+	// http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0001/?gameid=550&format=xml
+	// http://api.steampowered.com/ISteamUserAuth/AuthenticateUser/v0001/
+
 	// Private members
 	var use_https = false;
 	var default_version = '0001';
@@ -167,7 +170,18 @@
 			MakeRequest(APIURL('ISteamNews', 'GetNewsForApp'), opts, callback, errorCallback);
 		},
 
-		// Send a raw request (mainly for unsupported requests)
+		AchievementPercentages: function(opts, callback, errorCallback)
+		{
+			errorCallback = errorCallback || function(){};
+
+				// Why does Steam use appid in some places, and gameid in others?
+			opts = RequiredOptions(opts, ['gameid']) || MakeException("invalid_object");
+
+			MakeRequest(APIURL('ISteamUserStats', 'GetGlobalAchievementPercentagesForApp'),
+			            opts, callback, errorCallback);
+		},
+
+		// Send a raw request (mainly for supporting unsupported requests)
 		Raw: function(iface, method, opts, callback, errorCallback)
 		{
 			iface = iface || MakeException('argument_required');
