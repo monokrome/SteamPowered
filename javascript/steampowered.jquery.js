@@ -73,9 +73,6 @@
 	 *        application is able to make use of your newly set up proxy.
 	 ***/
 
-	// http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0001/?gameid=550&format=xml
-	// http://api.steampowered.com/ISteamUserAuth/AuthenticateUser/v0001/
-
 	// Private members
 	var use_https = false;
 	var default_version = '0001';
@@ -143,6 +140,14 @@
 
 		if (useProxy)
 		{
+			for (test in opts)
+			{
+				if ('join' in opts[test])
+				{
+					opts[test] = opts[test].join(',');
+				}
+			}
+
            	requestInfo['url'] = request_url + escape('&' + jQuery.param(opts));
 		}
 		else
@@ -179,6 +184,13 @@
 
 			MakeRequest(APIURL('ISteamUserStats', 'GetGlobalAchievementPercentagesForApp'),
 			            opts, callback, errorCallback);
+		},
+
+		PlayerSummaries: function(opts, callback, errorCallback)
+		{
+			errorCallback = errorCallback || function(){};
+			opts = RequiredOptions(opts, ['steamids']) || MakeException("invalid_object");
+			MakeRequest(APIURL('ISteamUser', 'GetPlayerSummaries'), opts, callback, errorCallback);
 		},
 
 		// Send a raw request (mainly for supporting unsupported requests)
